@@ -38,15 +38,15 @@ result = 0
 with open("day2/input/input.txt", "r") as mfile:
     content = mfile.read()
     intervals = content.split(',')
-    intervals = [intervals[-1]]
     for interval in intervals:
         [lower, upper] = [int(x) for x in interval.split('-')]
         [lower, upper] = interval.split('-')
-        invalid = get_invalid_ids(lower, upper)
-        print('inv: ', invalid, end='')
+        invalid = get_invalid_ids(str(int(lower)), str(int(upper)))
+        print('inv: ', invalid, end=' ')
         print('int: ', interval, end=' ')
-        print('low: ', lower, end=' ')
-        print('up: ', upper, end=' ')
+        print('low: ', lower=='22951285', end=' ')
+        print('up: ', upper=='23017127', end=' ')
+        print('up: ', str(int(upper)), end=' ')
         result+=sum(invalid)
         print()
     print('Result: ', result)
