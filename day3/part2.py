@@ -8,7 +8,6 @@ def get_largest_bat(bank:str):
     return [localindex, bigger]
 
 def get_largest_combination(bank: str, num):
-    print(bank, end='\n')
     globalindex = 0
     low = 0
     result = ''
