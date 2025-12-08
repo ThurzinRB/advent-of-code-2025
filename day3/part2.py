@@ -1,29 +1,37 @@
 def get_largest_bat(bank:str):
     bigger = 0
-    index = 0
+    localindex = 0
     for i, bat in enumerate(bank):
         if int(bat)>bigger:
             bigger = int(bat)
-            index = i
-    return [index, bigger]
+            localindex = i
+    return [localindex, bigger]
 
-def get_largest_pair(bank: str):
-    print(bank, end=' ')
-    [index_first, first] = get_largest_bat(bank[:-1])
-    print(f'[{index_first}, {first}]', end=' ')
-    [index_second, second] = get_largest_bat(bank[index_first+1:])
-    # print(bank[index_first+1:], end=' ')
-    print(f'[{index_second}, {second}]', end=' ')
-    result = str(first)+str(second)
-    print('result: ', result, end=' ')
-    print()
-    
+def get_largest_combination(bank: str, num):
+    print(bank, end='\n')
+    globalindex = 0
+    low = 0
+    result = ''
+    item = 0
+    up = -num+1
+
+    for i in range(0, num):
+        up = -(num-i)+1
+        if up ==0:
+            [localindex, item] = get_largest_bat(bank[low:])
+        else: 
+            [localindex, item] = get_largest_bat(bank[low:up])
+        globalindex = localindex+low
+        low = globalindex+1
+        result+=str(item)
+
+
     return result
 
 with open("day3/input/input.txt", 'r') as mfile:
     result = 0
     for line in mfile:
         bank = line.rstrip()
-        result+=int(get_largest_pair(bank))
+        result+=int(get_largest_combination(bank,12))
     print('sum: ', result)
     
