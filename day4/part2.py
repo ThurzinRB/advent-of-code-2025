@@ -40,9 +40,9 @@ def get_neighbours(i:int, j:int, matrix):
 
 
 matrix = parse_grid("day4/input/input.txt")
-print(matrix)
-print('\n\n')
-pretty_print(matrix)
+# print(matrix)
+# print('\n\n')
+# pretty_print(matrix)
 
 result = 0
 for i in range(0, len(matrix)):
@@ -52,6 +52,6 @@ for i in range(0, len(matrix)):
         if number<4 and matrix[i][j] == '@': 
             char='<'
             result+=1
-        print(matrix[i][j],char,number, end='\t')
-    print('')
+    #     print(matrix[i][j],char,number, end='\t')
+    # print('')
 print('Result: ', result)
