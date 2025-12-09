@@ -1,3 +1,6 @@
+import copy
+
+
 def parse_grid(file_path:str):
     result = []
     with open(file_path, "r") as mfile:
@@ -40,18 +43,20 @@ def get_neighbours(i:int, j:int, matrix):
 
 
 matrix = parse_grid("day4/input/input.txt")
-# print(matrix)
-# print('\n\n')
-# pretty_print(matrix)
+result=0
 
-result = 0
-for i in range(0, len(matrix)):
-    for j in range(0, len(matrix[0])):
-        number = get_neighbours(i,j,matrix)
-        char = '-'
-        if number<4 and matrix[i][j] == '@': 
-            char='<'
-            result+=1
-    #     print(matrix[i][j],char,number, end='\t')
-    # print('')
-print('Result: ', result)
+matrix_copy=copy.deepcopy(matrix)
+while (True):
+    removed = 0
+    for i in range(0, len(matrix)):
+        for j in range(0, len(matrix[0])):
+            number = get_neighbours(i,j,matrix)
+            char = '-'
+            if number<4 and matrix[i][j] == '@':
+                matrix_copy[i][j]='x'
+                removed+=1
+    matrix=copy.deepcopy(matrix_copy)
+    print('removed: ', removed)
+    result += removed
+    if removed == 0: break
+print('result: ', result)
