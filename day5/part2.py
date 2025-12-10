@@ -6,6 +6,8 @@ class Interval:
         self.max = max
     def __str__(self):
         return f'min: {self.min}, max: {self.max}'
+    def count(self):
+        return self.max - self.min +1
     
 class Graph:
     def __init__(self):
@@ -38,13 +40,11 @@ class Graph:
     def traverse(self):
         visited = []
         not_visited = list(self.nodes)
-        print("not_visited: ", not_visited)
         groups = []
         while len(visited)<len(self.nodes):
             visited_now = self.bfs(not_visited[0])
-            print('visited_now: ', visited_now)
             for i in visited_now:
-                not_visited.pop(i)
+                not_visited.remove(i)
             visited = visited + visited_now
             groups.append(visited_now)
         
@@ -74,27 +74,20 @@ def parse_input(file_path:str):
             intervals[i] = interval
         return intervals
     
-def join(low_a, up_a, low_b, up_b):
-    low_result = 0
-    up_result = 0
-    union = False
-    if ((low_a>= low_b and low_a<=up_b) or (up_a>= low_b and up_a<=up_b)) or ((low_b>= low_a and low_b<=up_a) or (up_b>= low_a and up_b<=up_a)):
-            union = True
-            low_result = min(low_a, low_b)
-            up_result = max(up_a, up_b)
-    
-    return [union, [low_result, up_result]]
-   
-# def group_intervals(intervals: List[Interval]):
-#      grouped = []
-#      for i, intervalA in enumerate(intervals):
-#           for j in range(i, len(intervals)):
-#                intervalB = intervals[j]
-#                if has_interception(intervalA, intervalB):
-                    
+def join_group(group: list, intervals: List[Interval]):
+    if len(group)==1:
+        min_val = intervals[group[0]].min
+        max_val = intervals[group[0]].max
+    else:
+        min_val = min(*[intervals[group_item].min for group_item in group])
+        max_val = max(*[intervals[group_item].max for group_item in group])
+
+
+    result = Interval(min_val, max_val)
+    return result
           
 
-intervals = parse_input('day5/input/basic.txt')
+intervals = parse_input('day5/input/input.txt')
 for key, interval in intervals.items():
     print(f'key: {key}, interval: {interval}')
 
@@ -102,24 +95,25 @@ for key, interval in intervals.items():
 # init graph
 mgraph = Graph()
 mgraph.add_nodes(list(intervals))
-print(mgraph.nodes)
-print('--------')
 
 # create connections
 for i in range(0, len(intervals)):
     for j in range(i+1, len(intervals)):
         intervalA = intervals[i]
         intervalB = intervals[j]
-        print(intervalA, '\t', intervalB, end='\t')
+        # print(intervalA, '\t', intervalB, end='\t')
         if has_interception(intervalA, intervalB):
-            print('Connect\t', end='')
+            # print('Connect\t', end='')
             mgraph.connect(i,j)
-        print(i, j)
-        print()
-
-print('---------')
-print(mgraph.nodes)
-mgraph.bfs(1)
+        # print(i, j)
+        # print()
 
 
-print(mgraph.traverse())
+groups = mgraph.traverse()
+result = 0
+for group in groups:
+    result+=join_group(group, intervals).count()
+print('Number of intervals: ', len(intervals))
+print('Number of intervals after resuming: ', len(groups))
+
+print('Result: ', result)
