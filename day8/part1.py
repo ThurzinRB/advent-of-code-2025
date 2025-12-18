@@ -20,7 +20,7 @@ class Junction_box:
                     min_dist2 = dist2
                     min_key = key
             # print(dist2)
-        return [min_key, dist2]
+        return [min_key, min_dist2]
 
 class Graph:
     def __init__(self):
@@ -56,12 +56,22 @@ for i in range(n):
     closest_pair = []
     for key, junction_box in junction_boxes.items():
         [local_closest, local_min_dist] = junction_box.get_closest(junction_boxes, mgraph)
-        if min_dist != 0 and min_dist>local_min_dist:
+        # print('key: ', key, '\tlocal_closest: ', local_closest, '\tlocal_min_dist', local_min_dist)
+        if min_dist>local_min_dist:
             min_dist = local_min_dist
             closest_pair = [junction_box.key, local_closest]
     mgraph.add_node(closest_pair[0])
     mgraph.add_node(closest_pair[1])
     mgraph.connect(*closest_pair)
     print(closest_pair)
+
+# print('-----------')
+# print('dist2')
+# print(junction_boxes['425,690,689'].dist2(junction_boxes['162,817,812']))
+
+# print('-----------')
+# print('get_min_dist')
+# ngraph = Graph()
+# print(junction_boxes['425,690,689'].get_closest(junction_boxes, ngraph))
 
     
