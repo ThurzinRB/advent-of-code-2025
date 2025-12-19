@@ -34,22 +34,47 @@ class Graph:
     def adj(self, node):
         if not node in self.nodes: return []
         return self.nodes[node]
+    def bfs(self,init_node):
+        
+        visited = []
+        queue = []
+        queue.append(init_node)
+        visited.append(init_node)
+        while queue:
+            s = queue.pop(0)
+            for i in self.adj(s):
+                if not i in visited:
+                    queue.append(i)
+                    visited.append(i)
+        return(visited)
+    def traverse(self):
+        visited = []
+        not_visited = list(self.nodes)
+        groups = []
+        while len(visited)<len(self.nodes):
+            visited_now = self.bfs(not_visited[0])
+            for i in visited_now:
+                not_visited.remove(i)
+            visited = visited + visited_now
+            groups.append(visited_now)
+        
+        return groups
 
 
-file_path = 'day8/input/basic.txt'
-n = 10
+file_path = 'day8/input/input.txt'
+n = 1000
 
 
 
 with open(file_path, 'r') as mfile:
     data = list(map(lambda x: x.strip('\n'),mfile.readlines()))
 
+mgraph = Graph()
 junction_boxes = {}
 for item in data:
     junction_boxes[item] = Junction_box(item)
+    # mgraph.add_node(item)
 print(*junction_boxes.values(), sep='\n')
-mgraph = Graph()
-print(junction_boxes['162,817,812'].get_closest(junction_boxes, mgraph))
 print('-----------')
 for i in range(n):
     min_dist = math.inf
@@ -65,8 +90,14 @@ for i in range(n):
     mgraph.connect(*closest_pair)
     print(closest_pair)
 
-# print('-----------')
-# print('dist2')
+print('-----------')
+print('graph')
+len_circuits = [len(i) for i in mgraph.traverse()]
+len_circuits.sort()
+print(len_circuits)
+print(*mgraph.traverse(), sep='\n')
+print('------------')
+print(len_circuits[-1]*len_circuits[-2]*len_circuits[-3])
 # print(junction_boxes['425,690,689'].dist2(junction_boxes['162,817,812']))
 
 # print('-----------')
