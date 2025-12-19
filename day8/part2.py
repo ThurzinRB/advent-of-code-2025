@@ -62,7 +62,6 @@ class Graph:
 
 
 file_path = 'day8/input/input.txt'
-n = 1000
 
 
 
@@ -73,10 +72,11 @@ mgraph = Graph()
 junction_boxes = {}
 for item in data:
     junction_boxes[item] = Junction_box(item)
-    # mgraph.add_node(item)
+    mgraph.add_node(item)
 print(*junction_boxes.values(), sep='\n')
 print('-----------')
-for i in range(n):
+count = 0
+while True:
     min_dist = math.inf
     closest_pair = []
     for key, junction_box in junction_boxes.items():
@@ -88,16 +88,24 @@ for i in range(n):
     mgraph.add_node(closest_pair[0])
     mgraph.add_node(closest_pair[1])
     mgraph.connect(*closest_pair)
+    count+=1
+    len_traverse = len(mgraph.traverse())
+    print('Count: ', count, 'len: ', len_traverse)
     print(closest_pair)
+    if len_traverse==1:
+        print('closest_pair: ', closest_pair)
+        result = int(closest_pair[0].split(',')[0])*int(closest_pair[1].split(',')[0])
+        print('result: ', result)
+        break
 
-print('-----------')
-print('graph')
-len_circuits = [len(i) for i in mgraph.traverse()]
-len_circuits.sort()
-print(len_circuits)
-print(*mgraph.traverse(), sep='\n')
-print('------------')
-print(len_circuits[-1]*len_circuits[-2]*len_circuits[-3])
+
+# print('-----------')
+# print('graph')
+# len_circuits = [len(i) for i in mgraph.traverse()]
+# len_circuits.sort()
+# print(len_circuits)
+# print(*mgraph.traverse(), sep='\n')
+# print('------------')
 # print(junction_boxes['425,690,689'].dist2(junction_boxes['162,817,812']))
 
 # print('-----------')
